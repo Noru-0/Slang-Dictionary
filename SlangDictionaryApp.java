@@ -1,6 +1,8 @@
+import javax.naming.Reference;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class SlangDictionaryApp extends JFrame {
     private SlangDictionary slangDictionary;
@@ -61,8 +63,29 @@ public class SlangDictionaryApp extends JFrame {
             }
         });
 
+        // Search by difinition
+        searchDefinitionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String definition = JOptionPane.showInputDialog("Input definition to find: ");
+                if (definition != null && !definition.isEmpty()) {
+                    List<String> slangWords = slangDictionary.searchByDefinition(definition);
+                    if (!slangWords.isEmpty()) {
+                        StringBuilder result = new StringBuilder("Slang words were found: ");
+                        for (String slang : slangWords) {
+                            result.append(slang).append("\n");
+                        }
+                        JOptionPane.showMessageDialog(null, result.toString());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Could not find suitable slang word.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please input valid definition.");
+                }
+            }
+        });
+
         // Add to panel
-        panel.add(searchSlangButton);
         add(panel);
     }
 

@@ -62,4 +62,14 @@ public class SlangDictionary {
     public String searchBySlangWord(String word) {
         return slangMap.get(word);
     }
+
+    public List<String> searchByDefinition(String word) {
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : definitionMap.entrySet()) {
+            if (entry.getKey().toLowerCase().contains(word.toLowerCase())) {
+                result.addAll(entry.getValue());
+            }
+        }
+        return result;
+    }
 }
