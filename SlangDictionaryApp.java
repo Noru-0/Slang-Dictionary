@@ -1,4 +1,3 @@
-import javax.naming.Reference;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -84,6 +83,29 @@ public class SlangDictionaryApp extends JFrame {
                 }
             }
         });
+
+        // Edit Slang Word
+        editSlangButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String oldSlang = JOptionPane.showInputDialog("Input slang word to edit: ");
+                if (oldSlang != null && !oldSlang.isEmpty()) {
+                    if (slangDictionary.containsSlangWord(oldSlang)) {
+                        String newDefinition = JOptionPane.showInputDialog("Input new definition: ");
+                        if (newDefinition != null && newDefinition.isEmpty()) {
+                            boolean edited = slangDictionary.editSlangWord(oldSlang, newDefinition);
+                            if(edited) {
+                                JOptionPane.showMessageDialog(null, "Edit succesfully.");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Error to edit.");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Slang word is not exists.");
+                        }
+                    }
+                }
+            }
+        }); 
 
         // Add to panel
         add(panel);
