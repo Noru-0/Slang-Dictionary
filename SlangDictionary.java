@@ -51,6 +51,10 @@ public class SlangDictionary {
         return slangMap;
     }
 
+    public boolean containsSlangWord(String word) {
+        return slangMap.containsKey(word);
+    }
+
     public TreeMap<String, List<String>> getDefinitionMap() {
         return definitionMap;
     }
@@ -71,5 +75,21 @@ public class SlangDictionary {
             }
         }
         return result;
+    }
+
+    public boolean editSlangWord(String oldSlang, String newDefinition) {
+        if (slangMap.containsKey(oldSlang)) {
+            slangMap.put(oldSlang, newDefinition);
+
+            for (Map.Entry<String, List<String>> entry : definitionMap.entrySet()) {
+                entry.getValue().remove(oldSlang);
+            }
+
+            definitionMap.computeIfAbsent(newDefinition, k -> new ArrayList<>()).add(oldSlang);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 }
