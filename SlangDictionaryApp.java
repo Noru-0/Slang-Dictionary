@@ -30,21 +30,6 @@ public class SlangDictionaryApp extends JFrame {
         JButton quizSlangButton = new JButton("9. Quiz (Choose the right definition)");
         JButton quizDefinitionButton = new JButton("10. Quiz (Choose the right slang word)");
 
-        // Action Listeners
-        searchSlangButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Start search by slang word");
-            }
-        });
-
-        searchDefinitionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Start search by definition");
-            }
-        });
-
         // Add button to panel
         panel.add(searchSlangButton);
         panel.add(searchDefinitionButton);
@@ -57,6 +42,27 @@ public class SlangDictionaryApp extends JFrame {
         panel.add(quizSlangButton);
         panel.add(quizDefinitionButton);
 
+        // Action Listeners
+
+        // Search slang word
+        searchSlangButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String slangWord = JOptionPane.showInputDialog("Input slang word to find: ");
+                if (slangWord != null && !slangWord.isEmpty()) {
+                    String definition = slangDictionary.searchBySlangWord((slangWord));
+                    if (definition != null) {
+                        JOptionPane.showMessageDialog(null, "Definition: " + definition);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Slang word is invalid.");
+                    }
+                }
+                
+            }
+        });
+
+        // Add to panel
+        panel.add(searchSlangButton);
         add(panel);
     }
 

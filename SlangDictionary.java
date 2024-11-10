@@ -58,4 +58,8 @@ public class SlangDictionary {
     public List<String> getSearchHistory() {
         return searchHistory;
     }
+
+    public String searchBySlangWord(String word) {
+        return slangMap.get(word);
+    }
 }
