@@ -63,10 +63,12 @@ public class SlangDictionary {
         return searchHistory;
     }
 
+    // Search by slang word
     public String searchBySlangWord(String word) {
         return slangMap.get(word);
     }
 
+    // Search by definition
     public List<String> searchByDefinition(String word) {
         List<String> result = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : definitionMap.entrySet()) {
@@ -77,6 +79,7 @@ public class SlangDictionary {
         return result;
     }
 
+    // Edit slang word 
     public boolean editSlangWord(String oldSlang, String newDefinition) {
         if (slangMap.containsKey(oldSlang)) {
             slangMap.put(oldSlang, newDefinition);
@@ -87,6 +90,24 @@ public class SlangDictionary {
 
             definitionMap.computeIfAbsent(newDefinition, k -> new ArrayList<>()).add(oldSlang);
 
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Delete slang word
+    public boolean deleteSlangWord(String slang) {
+        if (slangMap.containsKey(slang)) {
+            String definition = slangMap.remove(slang);
+
+            List<String> slangList = definitionMap.get(definition);
+            if (slangList != null) {
+                slangList.remove(slang);
+                if (slangList.isEmpty()) {
+                    definitionMap.remove(definition);
+                }
+            }
             return true;
         } else {
             return false;
