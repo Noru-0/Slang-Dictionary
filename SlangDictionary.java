@@ -80,21 +80,20 @@ public class SlangDictionary {
     }
 
     // Edit slang word 
-    public boolean editSlangWord(String oldSlang, String newDefinition) {
-        if (slangMap.containsKey(oldSlang)) {
-            slangMap.put(oldSlang, newDefinition);
-
-            for (Map.Entry<String, List<String>> entry : definitionMap.entrySet()) {
-                entry.getValue().remove(oldSlang);
+    public boolean editSlangWord(String slang, String newDefinition) {
+        if (slangMap.containsKey(slang)) {
+            String oldDefinition = slangMap.put(slang, newDefinition);
+            definitionMap.get(oldDefinition).remove(slang);
+            if (definitionMap.get(oldDefinition).isEmpty()) {
+                definitionMap.remove(oldDefinition);
             }
-
-            definitionMap.computeIfAbsent(newDefinition, k -> new ArrayList<>()).add(oldSlang);
-
+            definitionMap.computeIfAbsent(newDefinition, k -> new ArrayList<>()).add(slang);
+            saveDictionary(); 
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
+
 
     // Delete slang word
     public boolean deleteSlangWord(String slang) {
@@ -108,6 +107,7 @@ public class SlangDictionary {
                     definitionMap.remove(definition);
                 }
             }
+            saveDictionary();
             return true;
         } else {
             return false;
