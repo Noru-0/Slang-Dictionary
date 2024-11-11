@@ -107,6 +107,25 @@ public class SlangDictionaryApp extends JFrame {
             }
         }); 
 
+        deleteSlangButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String slang = JOptionPane.showInputDialog("Input Slang word to delete: ");
+                if (slang != null && !slang.isEmpty()) {
+                    int confirm = JOptionPane.showConfirmDialog(null, "You want to delete this slang word?", "Yes", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        boolean deleted = slangDictionary.deleteSlangWord(slang);
+                        if (deleted) {
+                            JOptionPane.showMessageDialog(null, "Delete successfully");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Slang word is not exists");
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please input valid Slang word");
+                }
+            }
+        });
         // Add to panel
         add(panel);
     }
