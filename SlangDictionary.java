@@ -79,6 +79,21 @@ public class SlangDictionary {
         return result;
     }
 
+    // Add slang word
+    public boolean addSlangWord(String slang, String definition) {
+        if (slangMap.containsKey(slang)) {
+            return false;
+        }
+        slangMap.put(slang, definition);
+        definitionMap.computeIfAbsent(definition, k -> new ArrayList<>()).add(slang);
+        saveDictionary();
+        return true;
+    }
+
+    public void updateSlangWord(String slang, String definition) {
+        slangMap.put(slang, definition);
+    }
+
     // Edit slang word 
     public boolean editSlangWord(String slang, String newDefinition) {
         if (slangMap.containsKey(slang)) {

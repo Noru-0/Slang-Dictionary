@@ -84,6 +84,51 @@ public class SlangDictionaryApp extends JFrame {
             }
         });
 
+        // Add Slang Word
+        addSlangButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String slang = JOptionPane.showInputDialog("Enter slang word: ");
+                if (slang == null || slang.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Slang word cannot be empty.");
+                    return;
+                }
+
+                String definition = JOptionPane.showInputDialog("Enter definition for '" + slang + "': ");
+                if (definition == null || definition.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Definition cannot be empty.");
+                    return;
+                }
+
+                // Check exists
+                if (slangDictionary.containsSlangWord(slang)) {
+                    int option = JOptionPane.showConfirmDialog(null, 
+                            "Slang word already exists. Do you want to overwrite it or create a new slang word?", 
+                            "Slang word exists", JOptionPane.YES_NO_OPTION);
+                    if (option == JOptionPane.YES_OPTION) {
+                        slangDictionary.updateSlangWord(slang, definition);
+                        JOptionPane.showMessageDialog(null, "Slang word updated successfully!");
+                    } else {
+                        String newSlang = slang + "_new"; // Add a suffix to create a new slang word
+                        boolean success = slangDictionary.addSlangWord(newSlang, definition);
+                        if (success) {
+                            JOptionPane.showMessageDialog(null, "New slang word added as a duplicate: " + newSlang);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Failed to add duplicate slang word.");
+                        }
+                    }
+                } else {
+                    boolean success = slangDictionary.addSlangWord(slang, definition);
+                    if (success) {
+                        JOptionPane.showMessageDialog(null, "Slang word added successfully!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to add slang word.");
+                    }
+                }
+            }
+        });
+
+
         // Edit Slang Word
         editSlangButton.addActionListener(new ActionListener(){
             @Override
