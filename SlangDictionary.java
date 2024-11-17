@@ -1,3 +1,4 @@
+import java.awt.desktop.SystemSleepEvent;
 import java.io.*;
 import java.util.*;
 
@@ -59,10 +60,6 @@ public class SlangDictionary {
         return definitionMap;
     }
 
-    public List<String> getSearchHistory() {
-        return searchHistory;
-    }
-
     // Search by slang word
     public String searchBySlangWord(String word) {
         return slangMap.get(word);
@@ -109,7 +106,6 @@ public class SlangDictionary {
         return false;
     }
 
-
     // Delete slang word
     public boolean deleteSlangWord(String slang) {
         if (slangMap.containsKey(slang)) {
@@ -127,5 +123,47 @@ public class SlangDictionary {
         } else {
             return false;
         }
+    }
+
+    // Save search history
+    public void addSearchHistory(String slangWord) {
+        searchHistory.add(slangWord);
+    }
+    // Show search history
+    public List<String> getSearchHistory() {
+        return new ArrayList<>(searchHistory);
+    }
+
+    // Reset Dictionary
+    public void resetDictionary() {
+        try (BufferedReader br = new BufferedReader(new FileReader("slang_backup.txt"))) {
+            slangMap.clear();
+            definitionMap.clear();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("`");
+                if (parts.length == 2) {
+                    slangMap.put(parts[0], parts[1]);
+                    definitionMap.computeIfAbsent(parts[1], k -> new ArrayList<>()).add(parts[0]);
+                }
+            }
+
+            saveDictionary();
+            System.out.println("Dictionary has been result to the original version.");
+        } catch (IOException e) {
+            System.out.println("Error resetting slang dictionary: " + e.getMessage());
+        }
+    }
+
+    // Random Slang Word
+    public String getRandomSlangWord() {
+        List<String> keys = new ArrayList<>(slangMap.keySet());
+        if (keys.isEmpty()) {
+            return null;
+        }
+        Random random = new Random();
+        String randomSlang = keys.get(random.nextInt(keys.size()));
+        return randomSlang;
     }
 }
