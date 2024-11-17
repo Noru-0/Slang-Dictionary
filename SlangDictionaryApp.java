@@ -51,6 +51,7 @@ public class SlangDictionaryApp extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String slangWord = JOptionPane.showInputDialog("Input slang word to find: ");
                 if (slangWord != null && !slangWord.isEmpty()) {
+                    slangDictionary.addSearchHistory(slangWord);
                     String definition = slangDictionary.searchBySlangWord((slangWord));
                     if (definition != null) {
                         JOptionPane.showMessageDialog(null, "Definition: " + definition);
@@ -109,7 +110,7 @@ public class SlangDictionaryApp extends JFrame {
                         slangDictionary.updateSlangWord(slang, definition);
                         JOptionPane.showMessageDialog(null, "Slang word updated successfully!");
                     } else {
-                        String newSlang = slang + "_new"; // Add a suffix to create a new slang word
+                        String newSlang = slang + "_new"; 
                         boolean success = slangDictionary.addSlangWord(newSlang, definition);
                         if (success) {
                             JOptionPane.showMessageDialog(null, "New slang word added as a duplicate: " + newSlang);
@@ -152,6 +153,7 @@ public class SlangDictionaryApp extends JFrame {
             }
         }); 
 
+        // Delete Slang Word
         deleteSlangButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -171,6 +173,50 @@ public class SlangDictionaryApp extends JFrame {
                 }
             }
         });
+
+        // Show search history
+        historyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> history = slangDictionary.getSearchHistory();
+                if (history.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No search history available.");
+                } else {
+                    StringBuilder historyStr = new StringBuilder("Search history:\n");
+                    for (String entry : history) {
+                        historyStr.append(entry).append("\n");
+                    }
+                    JOptionPane.showMessageDialog(null, historyStr.toString());
+                }
+            }
+        });
+
+        // Reset Dictionary
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Do you really want to reset the slang dictionary to the original version?", "Reset Confirmation", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    slangDictionary.resetDictionary();
+                    JOptionPane.showMessageDialog(null, "Slang dictionary has been reset to the original version.");
+                }
+            }
+        });
+
+        // Random Slang Word
+        randomButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String randomSlang = slangDictionary.getRandomSlangWord();
+                if (randomSlang != null) {
+                    String definition = slangDictionary.searchBySlangWord(randomSlang);
+                    JOptionPane.showMessageDialog(null, "Slang word of the day: " + randomSlang + "\nDefinition: " + definition);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No slang words available.");
+                }
+            }
+        });
+
         // Add to panel
         add(panel);
     }
