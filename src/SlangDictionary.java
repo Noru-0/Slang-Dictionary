@@ -61,7 +61,11 @@ public class SlangDictionary {
 
     // Search by slang word
     public String searchBySlangWord(String word) {
-        return slangMap.get(word);
+        String result = slangMap.get(word);
+        if (result != null) {
+            addSearchHistory(word);
+        }
+        return result;
     }
 
     // Search by definition
@@ -72,6 +76,9 @@ public class SlangDictionary {
                 result.addAll(entry.getValue());
             }
         }
+        // if (!result.isEmpty()) {
+        // addSearchHistory(word);
+        // }
         return result;
     }
 
@@ -136,7 +143,7 @@ public class SlangDictionary {
 
     // Reset Dictionary
     public void resetDictionary() {
-        try (BufferedReader br = new BufferedReader(new FileReader("slang_backup.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("../backups/slang_backup.txt"))) {
             slangMap.clear();
             definitionMap.clear();
 
@@ -165,5 +172,15 @@ public class SlangDictionary {
         Random random = new Random();
         String randomSlang = keys.get(random.nextInt(keys.size()));
         return randomSlang;
+    }
+
+    // Random Definition
+    public String getRandomDefinition() {
+        List<String> keys = new ArrayList<>(definitionMap.keySet());
+        if (keys.isEmpty()) {
+            return null;
+        }
+        Random random = new Random();
+        return keys.get(random.nextInt(keys.size()));
     }
 }
