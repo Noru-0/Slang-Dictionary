@@ -1,12 +1,15 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
 public class ViewHistory extends JPanel {
-    private JTextArea historyArea;
+    private JTable historyTable;
+    private DefaultTableModel tableModel;
     private SlangDictionary slangDictionary;
 
-    // Constructor to initialize ViewHistory with a reference to SlangDictionary
+    // Constructor
     public ViewHistory(SlangDictionary slangDictionary) {
         this.slangDictionary = slangDictionary;
 
@@ -15,41 +18,66 @@ public class ViewHistory extends JPanel {
 
         // Create label for the panel
         JLabel label = new JLabel("Search History:");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Create JTextArea to display the search history
-        historyArea = new JTextArea(10, 30);
-        historyArea.setEditable(false); // Make it read-only
-        historyArea.setLineWrap(true); // Enable line wrapping
-        historyArea.setWrapStyleWord(true); // Wrap whole words
+        // Create table model with column names
+        tableModel = new DefaultTableModel(new String[] { "No.", "Slang Word", "Definition" }, 0);
 
-        // Add JScrollPane to the text area to enable scrolling when content exceeds the
-        // visible area
-        JScrollPane scrollPane = new JScrollPane(historyArea);
+        // Create JTable using the table model
+        historyTable = new JTable(tableModel);
+        historyTable.setFillsViewportHeight(true); // Fills empty space in the table
+        historyTable.setEnabled(false); // Make it read-only
+
+        // Center align the table content
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < historyTable.getColumnCount(); i++) {
+            historyTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Add JScrollPane to the table to enable scrolling
+        JScrollPane scrollPane = new JScrollPane(historyTable);
 
         // Add label and scrollPane to the panel using BorderLayout
         add(label, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Display the search history
-        displayHistory();
+        // Add a refresh button
+        JButton refreshButton = new JButton("Refresh");
+        refreshButton.addActionListener(e -> displayHistory());
+        add(refreshButton, BorderLayout.SOUTH);
+
+        // Initially hide the panel
+        this.setVisible(false);
     }
 
-    // Method to display the search history in the JTextArea
+    // Method to display the search history in the JTable
     private void displayHistory() {
+        // Clear the table model
+        tableModel.setRowCount(0);
+
         // Get the search history from SlangDictionary
         List<String> history = slangDictionary.getSearchHistory();
 
-        // Check if the history is empty and set appropriate text
+        // Check if the history is empty and set appropriate data
         if (history.isEmpty()) {
-            historyArea.setText("No search history available.");
+            JOptionPane.showMessageDialog(this, "No search history available.", "Information",
+                    JOptionPane.INFORMATION_MESSAGE);
         } else {
-            // Build a string representing the search history
-            StringBuilder historyStr = new StringBuilder();
-            for (String entry : history) {
-                historyStr.append(entry).append("\n");
+            // Populate the table model with history data
+            int index = 1;
+            for (String slangWord : history) {
+                String definition = slangDictionary.searchBySlangWord(slangWord);
+                tableModel.addRow(new Object[] { index++, slangWord, definition });
             }
-            // Set the text of the JTextArea to the formatted search history
-            historyArea.setText(historyStr.toString());
+        }
+    }
+
+    // Method to show or hide the history panel
+    public void toggleVisibility() {
+        this.setVisible(!this.isVisible());
+        if (this.isVisible()) {
+            displayHistory(); // Refresh the table content when showing
         }
     }
 }
