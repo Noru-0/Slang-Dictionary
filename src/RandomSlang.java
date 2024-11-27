@@ -13,7 +13,7 @@ public class RandomSlang extends JPanel {
 
         // Set the layout for the panel
         setLayout(new BorderLayout(10, 10));
-        setPreferredSize(new Dimension(400, 200)); // Set preferred size
+        setPreferredSize(new Dimension(400, 200));
 
         // Create components
         randomButton = new JButton("Get Random Slang");
@@ -30,7 +30,7 @@ public class RandomSlang extends JPanel {
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.add(slangLabel);
-        textPanel.add(Box.createVerticalStrut(10)); // Space between labels
+        textPanel.add(Box.createVerticalStrut(10));
         textPanel.add(definitionLabel);
 
         add(randomButton, BorderLayout.NORTH);

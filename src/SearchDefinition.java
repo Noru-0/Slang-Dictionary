@@ -14,38 +14,36 @@ public class SearchDefinition extends JPanel {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // Panel chứa label và textfield
+        // Panel hold label and textfield
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Căn trái
+        inputPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         inputPanel.add(new JLabel("Enter Definition to Search:"));
 
-        definitionField = new JTextField(30); // Tăng chiều dài textfield
+        definitionField = new JTextField(30);
         inputPanel.add(definitionField);
 
-        // Panel chứa nút Search
+        // Panel have search button
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Căn trái
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         searchButton = new JButton("Search Definition");
         buttonPanel.add(searchButton);
 
-        // Vùng kết quả
-        resultArea = new JTextArea(5, 20); // Tăng chiều rộng để nhìn rõ hơn
-        resultArea.setLineWrap(true); // Tự động xuống dòng
-        resultArea.setWrapStyleWord(true); // Xuống dòng theo từ
+        // Answer area
+        resultArea = new JTextArea(5, 20);
+        resultArea.setLineWrap(true);
+        resultArea.setWrapStyleWord(true);
         resultArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(resultArea);
-        scrollPane.setPreferredSize(new Dimension(200, 100)); // Kích thước của vùng kết quả
+        scrollPane.setPreferredSize(new Dimension(200, 100));
 
-        // Thêm các panel vào main panel
+        // Add panel
         add(inputPanel);
         add(buttonPanel);
-        add(scrollPane); // Vùng kết quả ngay dưới nút Search
+        add(scrollPane);
 
-        // Thêm khoảng trống ở dưới cùng
-        add(Box.createRigidArea(new Dimension(0, 200))); // Khoảng trống 20px ở dưới
+        add(Box.createRigidArea(new Dimension(0, 200)));
 
-        // Xử lý sự kiện cho nút Search
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -53,7 +51,6 @@ public class SearchDefinition extends JPanel {
 
                 List<String> slangWords = slangDictionary.searchByDefinition(definition);
 
-                // Hiển thị kết quả
                 resultArea.setText(String.join("\n", slangWords));
             }
         });
