@@ -16,23 +16,22 @@ public class QuizSlang extends JPanel {
     public QuizSlang(SlangDictionary slangDictionary) {
         this.slangDictionary = slangDictionary;
 
-        // Sử dụng BoxLayout để căn giữa tất cả các thành phần
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // Tạo các thành phần giao diện
+        // Create components
         startQuizButton = new JButton("Start Quiz");
         questionLabel = new JLabel("Pick the correct definition for the slang word", SwingConstants.CENTER);
         scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
         questionCountLabel = new JLabel("Question: 0/" + TOTAL_QUESTIONS, SwingConstants.CENTER);
 
-        // Đặt các label căn giữa
+        // Set label center
         questionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         questionCountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         startQuizButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Thêm các thành phần giao diện
-        add(Box.createVerticalStrut(20)); // Khoảng cách trên
+        // Add components
+        add(Box.createVerticalStrut(20));
         add(scoreLabel);
         add(Box.createVerticalStrut(10));
         add(questionCountLabel);
@@ -42,17 +41,16 @@ public class QuizSlang extends JPanel {
         add(startQuizButton);
         add(Box.createVerticalStrut(20));
 
-        // Tạo panel chứa các nút trả lời
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10)); // Lưới 2x2, khoảng cách giữa các nút là 10px
+        // Create panel hold the answer
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         answerButtons = new JButton[4];
         for (int i = 0; i < 4; i++) {
             answerButtons[i] = new JButton();
-            answerButtons[i].setPreferredSize(new Dimension(150, 30)); // Kích thước nút cố định
+            answerButtons[i].setPreferredSize(new Dimension(150, 30));
             buttonPanel.add(answerButtons[i]);
         }
         add(buttonPanel);
 
-        // Gắn sự kiện cho nút Start Quiz
         startQuizButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,7 +59,6 @@ public class QuizSlang extends JPanel {
             }
         });
 
-        // Đặt khoảng cách bên dưới
         add(Box.createVerticalStrut(40));
     }
 
@@ -95,7 +92,7 @@ public class QuizSlang extends JPanel {
 
         questionLabel.setText("<html><center>What is the definition of: <b>" + slang + "</b></center></html>");
 
-        // Lấy danh sách định nghĩa
+        // Get definition
         List<String> allDefinitions = new ArrayList<>(slangDictionary.getSlangMap().values());
         allDefinitions.remove(correctDefinition);
 
@@ -103,19 +100,19 @@ public class QuizSlang extends JPanel {
         Collections.shuffle(allDefinitions);
         List<String> wrongDefinitions = allDefinitions.subList(0, 3);
 
-        // Thêm câu trả lời đúng vào danh sách
+        // Choose 3 incorrect answer
         List<String> options = new ArrayList<>(wrongDefinitions);
         options.add(correctDefinition);
         Collections.shuffle(options);
 
-        // Xóa tất cả ActionListener cũ
+        // Delete old ActionListener
         for (JButton button : answerButtons) {
             for (ActionListener al : button.getActionListeners()) {
                 button.removeActionListener(al);
             }
         }
 
-        // Gán đáp án cho các nút
+        // Set the answer to button
         for (int i = 0; i < 4; i++) {
             answerButtons[i].setText(options.get(i));
             final String answer = options.get(i);
@@ -124,7 +121,7 @@ public class QuizSlang extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     if (answer.equals(correctDefinition)) {
                         JOptionPane.showMessageDialog(null, "Correct!");
-                        score += 10; // Cộng điểm
+                        score += 10;
                     } else {
                         JOptionPane.showMessageDialog(null,
                                 "Incorrect! The correct answer is: " + correctDefinition);
@@ -137,17 +134,15 @@ public class QuizSlang extends JPanel {
     }
 
     public static void main(String[] args) {
-        // Tạo JFrame chứa trò chơi
+        // Create JFrame
         JFrame frame = new JFrame("Slang Quiz");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
         frame.setResizable(false);
 
-        // Tạo đối tượng SlangDictionary và QuizSlang
         SlangDictionary slangDictionary = new SlangDictionary();
         QuizSlang quizSlang = new QuizSlang(slangDictionary);
 
-        // Thêm QuizSlang vào JFrame
         frame.add(quizSlang);
         frame.setVisible(true);
     }

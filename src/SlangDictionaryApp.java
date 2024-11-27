@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class SlangDictionaryApp {
     public static void main(String[] args) {
@@ -26,14 +25,14 @@ public class SlangDictionaryApp {
         JPanel searchSlangPanel = new SearchSlang(slangDictionary);
         JPanel viewHistoryPanel = new ViewHistory(slangDictionary);
 
-        // Create a panel to hold buttons on the left side using GridBagLayout
+        // Create a panel to hold buttons
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5); // Add some space around buttons
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Create buttons for each feature with numbering
+        // Create buttons for each feature
         JButton searchSlangButton = createMenuButton("Search Slang", searchSlangPanel, tabbedPane);
         JButton searchDefinitionButton = createMenuButton("Search Definition", searchDefinitionPanel, tabbedPane);
         JButton viewHistoryButton = createMenuButton("Search History", viewHistoryPanel, tabbedPane);
@@ -45,16 +44,16 @@ public class SlangDictionaryApp {
         JButton quizSlangButton = createMenuButton("Quiz Slang", quizSlangPanel, tabbedPane);
         JButton quizDefinitionButton = createMenuButton("Quiz Definition", quizDefinitionPanel, tabbedPane);
 
-        // Add the MENU label with centered alignment
+        // Add the MENU label
         JLabel menuLabel = new JLabel("-----------MENU-----------");
         menuLabel.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2; // Make the label span across columns
+        gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         menuPanel.add(menuLabel, gbc);
 
-        // Add buttons to the menuPanel with equal width
+        // Add buttons to the menuPanel
         JButton[] buttons = { searchSlangButton, searchDefinitionButton, viewHistoryButton, addButton, deleteButton,
                 editButton, resetButton, randomSlangButton, quizDefinitionButton, quizSlangButton };
         for (int i = 0; i < buttons.length; i++) {
@@ -69,7 +68,7 @@ public class SlangDictionaryApp {
         gbc.gridy = buttons.length + 1;
         gbc.gridwidth = 2;
         gbc.weighty = 1;
-        menuPanel.add(new JPanel(), gbc); // Add empty space at the bottom
+        menuPanel.add(new JPanel(), gbc);
 
         // Set the layout for the frame
         frame.setLayout(new BorderLayout());
@@ -95,9 +94,9 @@ public class SlangDictionaryApp {
     // Helper method to create a clickable button
     private static JButton createMenuButton(String text, JPanel panel, JTabbedPane tabbedPane) {
         JButton button = new JButton(text);
-        button.setAlignmentX(Component.LEFT_ALIGNMENT); // Align to the left
-        button.setFont(new Font("Arial", Font.PLAIN, 16)); // Font for menu buttons
-        button.setPreferredSize(new Dimension(200, 25)); // Set button size (optional)
+        button.setAlignmentX(Component.LEFT_ALIGNMENT);
+        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setPreferredSize(new Dimension(200, 25));
 
         // Add action listener to switch to corresponding panel
         button.addActionListener(e -> tabbedPane.setSelectedComponent(panel));

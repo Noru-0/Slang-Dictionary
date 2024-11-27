@@ -25,8 +25,8 @@ public class ViewHistory extends JPanel {
 
         // Create JTable using the table model
         historyTable = new JTable(tableModel);
-        historyTable.setFillsViewportHeight(true); // Fills empty space in the table
-        historyTable.setEnabled(false); // Make it read-only
+        historyTable.setFillsViewportHeight(true);
+        historyTable.setEnabled(false);
 
         // Center align the table content
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -53,7 +53,6 @@ public class ViewHistory extends JPanel {
         displayHistory();
     }
 
-    // Method to display the search history in the JTable
     private void displayHistory() {
         // Clear the table model
         tableModel.setRowCount(0);
@@ -75,15 +74,13 @@ public class ViewHistory extends JPanel {
                 // If the slang word has been deleted or its definition is missing, display a
                 // message
                 if (definition == null) {
-                    definition = "Definition no longer available"; // or any custom message
+                    definition = "Definition no longer available";
                 }
 
-                // Add the row with the time, slang word, and its definition (or message if
-                // deleted)
+                // Add the row with the time, slang word, and its definition
                 tableModel.addRow(new Object[] { time, slangWord, definition });
             }
         } else if (this.isVisible()) {
-            // Show message only if user interacts with the panel while it's visible
             JOptionPane.showMessageDialog(this, "No search history available.", "Information",
                     JOptionPane.INFORMATION_MESSAGE);
         }
@@ -93,7 +90,7 @@ public class ViewHistory extends JPanel {
     public void toggleVisibility() {
         this.setVisible(!this.isVisible());
         if (this.isVisible()) {
-            displayHistory(); // Refresh the table content when showing
+            displayHistory();
         }
     }
 }

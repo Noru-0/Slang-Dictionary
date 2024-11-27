@@ -37,11 +37,12 @@ public class SlangDictionary {
         }
     }
 
+    // Load search history from file
     private void loadSearchHistory() {
         try (BufferedReader br = new BufferedReader(new FileReader(HistoryFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split("");
+                String[] parts = line.split("`");
                 if (parts.length == 2) {
                     searchHistory.add(new Pair<>(parts[0], parts[1]));
                 }
@@ -51,11 +52,11 @@ public class SlangDictionary {
         }
     }
 
-    // Save Data To File
+    // Save data to file
     public void saveDictionary() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(DataFile))) {
             for (Map.Entry<String, String> entry : slangMap.entrySet()) {
-                bw.write(entry.getKey() + "" + entry.getValue());
+                bw.write(entry.getKey() + "`" + entry.getValue());
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -68,7 +69,7 @@ public class SlangDictionary {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(HistoryFile))) {
             for (int i = 0; i < Math.min(30, searchHistory.size()); i++) {
                 Pair<String, String> entry = searchHistory.get(i);
-                writer.write(entry.getKey() + "" + entry.getValue());
+                writer.write(entry.getKey() + "`" + entry.getValue());
                 writer.newLine();
             }
         } catch (IOException e) {
@@ -136,10 +137,6 @@ public class SlangDictionary {
         definitionMap.computeIfAbsent(definition, k -> new ArrayList<>()).add(slang);
         saveDictionary();
         return true;
-    }
-
-    public void updateSlangWord(String slang, String definition) {
-        slangMap.put(slang, definition);
     }
 
     // Edit slang word
