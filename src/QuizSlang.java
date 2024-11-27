@@ -91,7 +91,7 @@ public class QuizSlang extends JPanel {
         questionCountLabel.setText("Question: " + questionCount + "/" + TOTAL_QUESTIONS);
 
         String slang = slangDictionary.getRandomSlangWord();
-        String correctDefinition = slangDictionary.searchBySlangWord(slang);
+        String correctDefinition = slangDictionary.searchBySlangWord(slang, true);
 
         questionLabel.setText("<html><center>What is the definition of: <b>" + slang + "</b></center></html>");
 

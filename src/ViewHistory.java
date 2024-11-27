@@ -21,7 +21,7 @@ public class ViewHistory extends JPanel {
         label.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Create table model with column names
-        tableModel = new DefaultTableModel(new String[] { "No.", "Slang Word", "Definition" }, 0);
+        tableModel = new DefaultTableModel(new String[] { "Time", "Slang Word", "Definition" }, 0);
 
         // Create JTable using the table model
         historyTable = new JTable(tableModel);
@@ -49,6 +49,8 @@ public class ViewHistory extends JPanel {
 
         // Initially hide the panel
         this.setVisible(false);
+
+        displayHistory();
     }
 
     // Method to display the search history in the JTable
@@ -57,19 +59,33 @@ public class ViewHistory extends JPanel {
         tableModel.setRowCount(0);
 
         // Get the search history from SlangDictionary
-        List<String> history = slangDictionary.getSearchHistory();
+        List<Pair<String, String>> history = slangDictionary.getSearchHistory();
 
         // Check if the history is empty and set appropriate data
-        if (history.isEmpty()) {
+        if (!history.isEmpty()) {
+            // Populate the table model with history data
+            for (int i = history.size() - 1; i >= 0; i--) {
+                Pair<String, String> entry = history.get(i);
+                String slangWord = entry.getKey();
+                String time = entry.getValue();
+
+                // Check if the slang word exists in the dictionary
+                String definition = slangDictionary.getSlangMap().get(slangWord);
+
+                // If the slang word has been deleted or its definition is missing, display a
+                // message
+                if (definition == null) {
+                    definition = "Definition no longer available"; // or any custom message
+                }
+
+                // Add the row with the time, slang word, and its definition (or message if
+                // deleted)
+                tableModel.addRow(new Object[] { time, slangWord, definition });
+            }
+        } else if (this.isVisible()) {
+            // Show message only if user interacts with the panel while it's visible
             JOptionPane.showMessageDialog(this, "No search history available.", "Information",
                     JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            // Populate the table model with history data
-            int index = 1;
-            for (String slangWord : history) {
-                String definition = slangDictionary.searchBySlangWord(slangWord);
-                tableModel.addRow(new Object[] { index++, slangWord, definition });
-            }
         }
     }
 

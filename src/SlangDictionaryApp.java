@@ -34,16 +34,16 @@ public class SlangDictionaryApp {
         gbc.insets = new Insets(5, 5, 5, 5); // Add some space around buttons
 
         // Create buttons for each feature with numbering
+        JButton searchSlangButton = createMenuButton("Search Slang", searchSlangPanel, tabbedPane);
+        JButton searchDefinitionButton = createMenuButton("Search Definition", searchDefinitionPanel, tabbedPane);
+        JButton viewHistoryButton = createMenuButton("Search History", viewHistoryPanel, tabbedPane);
         JButton addButton = createMenuButton("Add Slang", addSlangPanel, tabbedPane);
         JButton deleteButton = createMenuButton("Delete Slang", deleteSlangPanel, tabbedPane);
         JButton editButton = createMenuButton("Edit Slang", editSlangPanel, tabbedPane);
-        JButton quizDefinitionButton = createMenuButton("Quiz Definition", quizDefinitionPanel, tabbedPane);
-        JButton quizSlangButton = createMenuButton("Quiz Slang", quizSlangPanel, tabbedPane);
-        JButton randomSlangButton = createMenuButton("Random Slang", randomSlangPanel, tabbedPane);
         JButton resetButton = createMenuButton("Reset Dictionary", resetPanel, tabbedPane);
-        JButton searchDefinitionButton = createMenuButton("Search Definition", searchDefinitionPanel, tabbedPane);
-        JButton searchSlangButton = createMenuButton("Search Slang", searchSlangPanel, tabbedPane);
-        JButton viewHistoryButton = createMenuButton("Search History", viewHistoryPanel, tabbedPane);
+        JButton randomSlangButton = createMenuButton("Random Slang", randomSlangPanel, tabbedPane);
+        JButton quizSlangButton = createMenuButton("Quiz Slang", quizSlangPanel, tabbedPane);
+        JButton quizDefinitionButton = createMenuButton("Quiz Definition", quizDefinitionPanel, tabbedPane);
 
         // Add the MENU label with centered alignment
         JLabel menuLabel = new JLabel("-----------MENU-----------");
@@ -55,8 +55,8 @@ public class SlangDictionaryApp {
         menuPanel.add(menuLabel, gbc);
 
         // Add buttons to the menuPanel with equal width
-        JButton[] buttons = { addButton, deleteButton, editButton, quizDefinitionButton, quizSlangButton,
-                randomSlangButton, resetButton, searchDefinitionButton, searchSlangButton, viewHistoryButton };
+        JButton[] buttons = { searchSlangButton, searchDefinitionButton, viewHistoryButton, addButton, deleteButton,
+                editButton, resetButton, randomSlangButton, quizDefinitionButton, quizSlangButton };
         for (int i = 0; i < buttons.length; i++) {
             gbc.gridx = 0;
             gbc.gridy = i + 1;
@@ -77,16 +77,16 @@ public class SlangDictionaryApp {
         frame.add(tabbedPane, BorderLayout.CENTER);
 
         // Add tabs for each panel
+        tabbedPane.addTab("Search Slang", searchSlangPanel);
+        tabbedPane.addTab("Search Definition", searchDefinitionPanel);
+        tabbedPane.addTab("Search History", viewHistoryPanel);
         tabbedPane.addTab("Add Slang", addSlangPanel);
         tabbedPane.addTab("Delete Slang", deleteSlangPanel);
         tabbedPane.addTab("Edit Slang", editSlangPanel);
+        tabbedPane.addTab("Reset Dictionary", resetPanel);
+        tabbedPane.addTab("Random Slang", randomSlangPanel);
         tabbedPane.addTab("Quiz Definition", quizDefinitionPanel);
         tabbedPane.addTab("Quiz Slang", quizSlangPanel);
-        tabbedPane.addTab("Random Slang", randomSlangPanel);
-        tabbedPane.addTab("Reset Dictionary", resetPanel);
-        tabbedPane.addTab("Search Definition", searchDefinitionPanel);
-        tabbedPane.addTab("Search Slang", searchSlangPanel);
-        tabbedPane.addTab("Search History", viewHistoryPanel);
 
         // Show the frame
         frame.setVisible(true);
