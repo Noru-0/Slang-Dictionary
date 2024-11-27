@@ -1,11 +1,13 @@
 import java.io.*;
 import java.util.*;
+import java.text.SimpleDateFormat;
 
 public class SlangDictionary {
     private HashMap<String, String> slangMap;
     private TreeMap<String, List<String>> definitionMap;
-    private List<String> searchHistory;
-    private static final String DataFile = "../resources/slang.txt";
+    private List<Pair<String, String>> searchHistory;
+    private static final String DataFile = System.getProperty("user.dir") + "\\resources\\slang.txt";
+    private static final String HistoryFile = System.getProperty("user.dir") + "\\resources\\search_history.txt";
 
     // Constructor
     public SlangDictionary() {
@@ -13,6 +15,7 @@ public class SlangDictionary {
         definitionMap = new TreeMap<>();
         searchHistory = new ArrayList<>();
         loadDictionary();
+        loadSearchHistory();
     }
 
     // Load Data From File
@@ -34,15 +37,42 @@ public class SlangDictionary {
         }
     }
 
+    private void loadSearchHistory() {
+        try (BufferedReader br = new BufferedReader(new FileReader(HistoryFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("");
+                if (parts.length == 2) {
+                    searchHistory.add(new Pair<>(parts[0], parts[1]));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading search history: " + e.getMessage());
+        }
+    }
+
     // Save Data To File
     public void saveDictionary() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(DataFile))) {
             for (Map.Entry<String, String> entry : slangMap.entrySet()) {
-                bw.write(entry.getKey() + "`" + entry.getValue());
+                bw.write(entry.getKey() + "" + entry.getValue());
                 bw.newLine();
             }
         } catch (IOException e) {
             System.out.println("Error saving slang dictionary: " + e.getMessage());
+        }
+    }
+
+    // Save search history to file
+    public void saveSearchHistory() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HistoryFile))) {
+            for (int i = 0; i < Math.min(30, searchHistory.size()); i++) {
+                Pair<String, String> entry = searchHistory.get(i);
+                writer.write(entry.getKey() + "" + entry.getValue());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving search history: " + e.getMessage());
         }
     }
 
@@ -59,11 +89,29 @@ public class SlangDictionary {
         return definitionMap;
     }
 
+    public List<Pair<String, String>> getSearchHistory() {
+        return new ArrayList<>(searchHistory);
+    }
+
+    // Add search history entry
+    public void addSearchHistory(String slangWord, boolean isQuiz) {
+        if (isQuiz) {
+            return;
+        }
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        searchHistory.add(new Pair<>(slangWord, timestamp));
+        if (searchHistory.size() > 30) {
+            searchHistory.remove(0);
+        }
+        saveSearchHistory();
+    }
+
     // Search by slang word
-    public String searchBySlangWord(String word) {
+    public String searchBySlangWord(String word, boolean isQuiz) {
         String result = slangMap.get(word);
         if (result != null) {
-            addSearchHistory(word);
+            addSearchHistory(word, isQuiz);
+            saveSearchHistory();
         }
         return result;
     }
@@ -76,9 +124,6 @@ public class SlangDictionary {
                 result.addAll(entry.getValue());
             }
         }
-        // if (!result.isEmpty()) {
-        // addSearchHistory(word);
-        // }
         return result;
     }
 
@@ -131,19 +176,10 @@ public class SlangDictionary {
         }
     }
 
-    // Save search history
-    public void addSearchHistory(String slangWord) {
-        searchHistory.add(slangWord);
-    }
-
-    // Show search history
-    public List<String> getSearchHistory() {
-        return new ArrayList<>(searchHistory);
-    }
-
     // Reset Dictionary
     public void resetDictionary() {
-        try (BufferedReader br = new BufferedReader(new FileReader("../backups/slang_backup.txt"))) {
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(System.getProperty("user.dir") + "\\resources\\slang_backup.txt"))) {
             slangMap.clear();
             definitionMap.clear();
 
@@ -182,5 +218,29 @@ public class SlangDictionary {
         }
         Random random = new Random();
         return keys.get(random.nextInt(keys.size()));
+    }
+}
+
+// Pair Class
+class Pair<K, V> {
+    private K key;
+    private V value;
+
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public K getKey() {
+        return key;
+    }
+
+    public V getValue() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return key + " : " + value;
     }
 }

@@ -11,21 +11,38 @@ public class DeleteSlang extends JPanel {
     public DeleteSlang(SlangDictionary slangDictionary) {
         this.slangDictionary = slangDictionary;
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        // Sử dụng GridBagLayout để tùy chỉnh vị trí các thành phần
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Tạo trường nhập
+        JLabel promptLabel = new JLabel("Enter Slang Word to Delete:");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(promptLabel, gbc);
 
         slangField = new JTextField(20);
+        gbc.gridy = 1;
+        add(slangField, gbc);
+
+        // Tạo nút delete
         deleteButton = new JButton("Delete Slang");
-        messageLabel = new JLabel();
+        gbc.gridy = 2;
+        add(deleteButton, gbc);
 
-        add(new JLabel("Enter Slang Word to Delete:"));
-        add(slangField);
-        add(deleteButton);
-        add(messageLabel);
+        // Tạo nhãn hiển thị thông báo
+        messageLabel = new JLabel("", SwingConstants.CENTER);
+        gbc.gridy = 3;
+        gbc.weighty = 1.0; // Chừa khoảng trống bên dưới
+        add(messageLabel, gbc);
 
+        // Xử lý sự kiện nút delete
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String slang = slangField.getText();
+                String slang = slangField.getText().trim();
                 if (slangDictionary.deleteSlangWord(slang)) {
                     messageLabel.setText("Slang word deleted successfully.");
                 } else {
